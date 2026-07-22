@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: document-processing-agent:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - MONGODB_URI=mongodb://mongodb:27017/document_processor
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - QDRANT_HOST=http://qdrant:6333
+      - QDRANT_COLLECTION_NAME=documents
+      - QDRANT_VECTOR_DIMENSIONS=1536
+      - EMBEDDING_PROVIDER=openai
+      - EMBEDDING_MODEL=text-embedding-3-small
+      - LOG_LEVEL=info
+      - LOG_FORMAT=json
+      - WORKER_CONCURRENCY=2
+      - MAX_UPLOAD_SIZE=52428800
+      - UPLOADS_DIR=uploads
+    depends_on:
+      - mongodb
+      - redis
+      - qdrant
+    volumes:
+      - uploads_data:/app/uploads
+
+  mongodb:
+    image: mongo:6.0-jammy
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+volumes:
+  uploads_data:
+  mongodb_data:
+  redis_data:
+  qdrant_data:

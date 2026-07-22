@@ -1,0 +1,22 @@
+# Git metadata
+.git
+.gitignore
+
+# Package manager files
+node_modules
+npm-debug.log
+
+# Build outputs
+dist
+build
+
+# Env configurations
+.env
+.env.local
+.env.development
+.env.production
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore

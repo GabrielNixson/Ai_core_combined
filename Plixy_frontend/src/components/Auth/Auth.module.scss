@@ -1,0 +1,144 @@
+.authOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #1c1c1f;
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.authModal {
+  background: #1c1c1f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 3rem;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  text-align: center;
+
+  h2 {
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+
+  p {
+    color: #a0a0a5;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
+}
+
+.inputGroup {
+  margin-bottom: 1.5rem;
+  text-align: left;
+
+  label {
+    display: block;
+    color: #fff;
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+    font-weight: 500;
+  }
+
+  input {
+    width: 100%;
+    background: #2c2c31;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+
+    padding: 8px 12px;
+    color: #fff !important;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.2s;
+
+    &:focus {
+      border-color: #4285f4;
+      background: #323238;
+      box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+    }
+
+    &::placeholder {
+      color: #555;
+    }
+
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:active {
+      -webkit-text-fill-color: #fff !important;
+      -webkit-box-shadow: 0 0 0px 1000px #2c2c31 inset !important;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+  }
+}
+
+.errorText {
+  color: #ff4d4d;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+  background: rgba(255, 77, 77, 0.1);
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 77, 77, 0.2);
+}
+
+.submitBtn {
+  width: 100%;
+  background: #917efc !important;
+  color: #fff !important;
+  border: none;
+  border-radius: 10px;
+  padding: 12px !important;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+  margin-bottom: 1.5rem;
+  box-sizing: border-box;
+  &:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.switchText {
+  color: #a0a0a5;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.switchBtn {
+  background: none;
+  border: none;
+  color: #917efc !important;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.95rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const rag_controller_1 = require("../controllers/rag.controller");
+const router = (0, express_1.Router)();
+const controller = new rag_controller_1.RAGController();
+router.post('/query', controller.query);
+router.post('/ask', controller.ask);
+router.post('/test', controller.test);
+router.get('/config', controller.getConfig);
+exports.default = router;

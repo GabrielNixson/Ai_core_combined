@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const agent_controller_1 = require("../controllers/agent.controller");
+const router = (0, express_1.Router)();
+const controller = new agent_controller_1.AgentController();
+router.post('/chat', controller.chat);
+router.post('/query', controller.query);
+router.post('/reset', controller.reset);
+router.get('/state/:conversationId', controller.getState);
+exports.default = router;

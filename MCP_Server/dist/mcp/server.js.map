@@ -1,0 +1,1 @@
+{"version":3,"file":"server.js","sourceRoot":"","sources":["../../src/mcp/server.ts"],"names":[],"mappings":";;AAGA,0CAaC;AAhBD,oEAAoE;AACpE,0DAAyE;AAEzE,SAAgB,eAAe;IAC7B,MAAM,MAAM,GAAG,IAAI,kBAAS,CAAC;QAC3B,IAAI,EAAE,oBAAoB;QAC1B,OAAO,EAAE,OAAO;KACjB,CAAC,CAAC;IAEH,MAAM,CAAC,IAAI,CACT,kBAAkB,EAClB,8BAAc,EACd,+BAAe,CAChB,CAAC;IAEF,OAAO,MAAM,CAAC;AAChB,CAAC"}

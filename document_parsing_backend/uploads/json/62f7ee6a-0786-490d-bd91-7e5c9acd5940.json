@@ -1,0 +1,24 @@
+{
+  "documentId": "62f7ee6a-0786-490d-bd91-7e5c9acd5940",
+  "documentType": "TXT",
+  "metadata": {
+    "title": "plc_custom_manual.txt",
+    "totalPages": 1,
+    "sourceType": "TXT"
+  },
+  "sections": [
+    {
+      "title": "Document Body",
+      "level": 1,
+      "content": [
+        {
+          "type": "paragraph",
+          "content": "This is a custom PLC device manual. The error code 999 indicates CPU temperature limit exceeded.",
+          "metadata": {
+            "page": 1
+          }
+        }
+      ]
+    }
+  ]
+}

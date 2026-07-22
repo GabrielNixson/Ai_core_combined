@@ -1,0 +1,33 @@
+@use "./variables" as *;
+
+/* ===============================
+   Light Theme (Default)
+================================ */
+[data-theme="light"] {
+  --background: #{$light-background};
+  --secondary: #{$light-secondary};
+
+  --text-primary: #{$light-text-primary};
+  --text-secondary: #{$light-text-secondary};
+
+  --button-primary: #{$light-button-primary};
+
+  --border-color: #{$light-border-color};
+  --border: 1px solid var(--border-color);
+}
+
+/* ===============================
+   Dark Theme
+================================ */
+[data-theme="dark"] {
+  --background: #{$dark-background};
+  --secondary: #{$dark-secondary};
+
+  --text-primary: #{$dark-text-primary};
+  --text-secondary: #{$dark-text-secondary};
+
+  --button-primary: #{$dark-button-primary};
+
+  --border-color: #{$dark-border-color};
+  --border: 1px solid var(--border-color);
+}

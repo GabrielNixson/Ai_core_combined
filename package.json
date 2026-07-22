@@ -1,0 +1,8 @@
+{
+  "name": "ai-combined-project-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npx concurrently -k -n \"parsing,langgraph,frontend\" -c \"magenta,blue,green\" \"npm run dev --prefix document_parsing_backend\" \"npm run dev --prefix LangGraph_backend\" \"npm run dev --prefix Plixy_frontend\""
+  }
+}

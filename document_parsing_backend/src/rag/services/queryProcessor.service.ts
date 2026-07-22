@@ -1,0 +1,27 @@
+import { logger } from '../../utils/logger';
+
+export class QueryProcessor {
+  /**
+   * Cleans, validates, and normalizes a user query.
+   */
+  public processQuery(query: string): string {
+    if (!query) {
+      throw new Error('[Query Processor] Search query cannot be empty.');
+    }
+
+    // Filter out control characters (non-printable chars) first
+    let normalized = query.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
+
+    // Trim whitespace and normalize multiple spaces/newlines
+    normalized = normalized.trim().replace(/\s+/g, ' ');
+
+    if (normalized.length < 2) {
+      throw new Error('[Query Processor] Search query is too short. Query must contain at least 2 alphanumeric characters.');
+    }
+
+    logger.debug(`[Query Processor] Normalized query: "${normalized}"`);
+    return normalized;
+  }
+}
+
+export default QueryProcessor;

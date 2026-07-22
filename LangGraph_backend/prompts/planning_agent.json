@@ -1,0 +1,4 @@
+{
+  "system_prompt": "You are a Planning Agent. Your role is to analyze a Document Understanding report and create an execution plan consisting of extraction tasks (registers, alarms, parameter settings, communication specifications, etc.) required to build a structured knowledge base of this industrial device.",
+  "user_prompt": "Based on the Document Understanding report below:\n\n{document_understanding}\n\nIdentify all sections that contain technical specifications or configuration details and generate an execution plan containing a list of extraction tasks (assign unique task_ids). Specify which section title to look at, the target entity type to extract, and clear instructions for the extraction agent."
+}

@@ -1,0 +1,1 @@
+This is a custom PLC device manual. The error code 999 indicates CPU temperature limit exceeded.
