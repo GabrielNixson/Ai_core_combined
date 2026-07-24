@@ -23,13 +23,15 @@ export class DocumentService {
 
     // Extract UUID from stored filename (e.g. "a1b2c3d4-e5f6-...pdf")
     const ext = path.extname(file.originalname).toLowerCase();
-    const documentId = path.basename(file.filename, ext);
+    const rawStoredName = file.filename || (file as any).key || '';
+    const storedName = path.basename(rawStoredName);
+    const documentId = path.basename(storedName, ext);
 
     const docData: Partial<IDocument> = {
       documentId,
       originalName: file.originalname,
-      storedName: file.filename,
-      filePath: file.path,
+      storedName: storedName,
+      filePath: file.path || (file as any).key || '',
       mimeType: file.mimetype,
       extension: ext,
       size: file.size,

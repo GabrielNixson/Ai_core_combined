@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userRateLimiter = exports.globalIpRateLimiter = void 0;
-const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
+const express_rate_limit_1 = require("express-rate-limit");
 const rate_limit_redis_1 = __importDefault(require("rate-limit-redis"));
 const ioredis_1 = __importDefault(require("ioredis"));
 const config_1 = require("../config/config");
@@ -15,7 +15,7 @@ try {
         host: config_1.queueConfig.redisHost,
         port: config_1.queueConfig.redisPort,
         password: config_1.queueConfig.redisPassword,
-        lazyConnect: true, // Connect on demand to prevent startup blocking
+        maxRetriesPerRequest: 1, // Fail fast to avoid blocking app
     });
     redisClient.on('error', (err) => {
         logger_1.logger.error('Redis Rate Limiting client error:', err);
@@ -25,7 +25,7 @@ catch (err) {
     logger_1.logger.error('Failed to initialize Redis for rate limiting:', err);
 }
 // Global IP-based rate limiter
-exports.globalIpRateLimiter = (0, express_rate_limit_1.default)({
+exports.globalIpRateLimiter = (0, express_rate_limit_1.rateLimit)({
     windowMs: config_1.securityConfig.rateLimitWindowMs,
     max: config_1.securityConfig.rateLimitMax,
     standardHeaders: true,
@@ -48,13 +48,20 @@ exports.globalIpRateLimiter = (0, express_rate_limit_1.default)({
     },
 });
 // Per-user rate limiter
-exports.userRateLimiter = (0, express_rate_limit_1.default)({
+exports.userRateLimiter = (0, express_rate_limit_1.rateLimit)({
     windowMs: config_1.securityConfig.rateLimitWindowMs,
     max: Math.floor(config_1.securityConfig.rateLimitMax * 2), // Double capacity for authenticated sessions
     standardHeaders: true,
     legacyHeaders: false,
+    validate: { ip: false },
+    // keyGenerator: (req) => {
+    //   return req.user ? `rate_limit_user:${req.user.id}` : `rate_limit_ip:${req.ip}`;
+    // },
     keyGenerator: (req) => {
-        return req.user ? `rate_limit_user:${req.user.id}` : `rate_limit_ip:${req.ip}`;
+        if (req.user?.id) {
+            return `user:${req.user.id}`;
+        }
+        return (0, express_rate_limit_1.ipKeyGenerator)(req.ip);
     },
     store: new rate_limit_redis_1.default({
         // @ts-ignore

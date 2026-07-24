@@ -5,18 +5,21 @@ const openai_1 = require("openai");
 const config_1 = require("../../config/config");
 const logger_1 = require("../../utils/logger");
 class OpenAIEmbeddingProvider {
-    client;
+    client = null;
     model;
     constructor(options) {
         const apiKey = options?.apiKey || config_1.config.openaiApiKey;
         this.model = options?.model || config_1.config.embeddingModel || 'text-embedding-3-small';
         if (!apiKey || apiKey === 'mock-key-for-now') {
             logger_1.logger.warn('[OpenAI Embedding Provider] No valid API key provided. Provider will run in mock mode or error on real API calls.');
+            this.client = null;
         }
-        this.client = new openai_1.OpenAI({
-            apiKey: apiKey || '',
-            timeout: config_1.config.embeddingRequestTimeout || 30000,
-        });
+        else {
+            this.client = new openai_1.OpenAI({
+                apiKey: apiKey,
+                timeout: config_1.config.embeddingRequestTimeout || 30000,
+            });
+        }
     }
     async generateEmbedding(text) {
         const result = await this.generateEmbeddings([text]);
@@ -32,9 +35,34 @@ class OpenAIEmbeddingProvider {
         }
         // Handle mock API key for local testing/development/CI
         const apiKey = config_1.config.openaiApiKey;
-        if (!apiKey || apiKey === 'mock-key-for-now') {
-            logger_1.logger.info(`[OpenAI Embedding Provider] MOCK MODE: Generating mock embeddings of 1536 dimensions for ${texts.length} inputs.`);
-            return texts.map(() => Array.from({ length: 1536 }, () => Math.random() - 0.5));
+        if (!this.client || !apiKey || apiKey === 'mock-key-for-now') {
+            logger_1.logger.info(`[OpenAI Embedding Provider] MOCK MODE: Generating embeddings via Ollama nomic-embed-text for ${texts.length} inputs.`);
+            try {
+                const embeddings = [];
+                const ollamaBaseUrl = process.env.OLLAMA_BASE_URL || 'http://192.168.2.210:11434';
+                const cleanBase = ollamaBaseUrl.replace(/\/$/, '');
+                for (const text of texts) {
+                    const response = await fetch(`${cleanBase}/api/embeddings`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ model: 'nomic-embed-text:latest', prompt: text })
+                    });
+                    if (!response.ok) {
+                        throw new Error(`Ollama embedding call failed: status ${response.status}`);
+                    }
+                    const data = await response.json();
+                    let vector = data.embedding;
+                    if (vector.length < 1536) {
+                        vector = [...vector, ...Array(1536 - vector.length).fill(0)];
+                    }
+                    embeddings.push(vector);
+                }
+                return embeddings;
+            }
+            catch (err) {
+                logger_1.logger.warn(`[OpenAI Embedding Provider] Fallback from Ollama to random mock embeddings due to error: ${err.message}`);
+                return texts.map(() => Array.from({ length: 1536 }, () => Math.random() - 0.5));
+            }
         }
         try {
             logger_1.logger.debug(`[OpenAI Embedding Provider] Requesting embeddings for ${texts.length} inputs using model ${this.model}`);

@@ -82,6 +82,11 @@ const SecurityConfigSchema = z.object({
 const StorageConfigSchema = z.object({
   maxUploadSize: z.coerce.number().default(52428800), // Default 50MB (52,428,800 bytes)
   uploadsDir: z.string().default('uploads'),
+  storageProvider: z.enum(['local', 'minio']).default('local'),
+  minioEndpoint: z.string().default('http://localhost:9000'),
+  minioAccessKey: z.string().default('minioadmin'),
+  minioSecretKey: z.string().default('miniopassword'),
+  minioBucket: z.string().default('iiot-documents'),
 });
 
 const LoggingConfigSchema = z.object({
@@ -134,6 +139,11 @@ export interface Config {
   embeddingMaxRetries: number;
   embeddingRequestTimeout: number;
   openaiApiKey?: string;
+  storageProvider: 'local' | 'minio';
+  minioEndpoint: string;
+  minioAccessKey: string;
+  minioSecretKey: string;
+  minioBucket: string;
   qdrantHost: string;
   qdrantApiKey?: string;
   collectionName: string;
@@ -228,6 +238,11 @@ try {
     storage: {
       maxUploadSize: process.env.MAX_UPLOAD_SIZE,
       uploadsDir: process.env.UPLOADS_DIR,
+      storageProvider: process.env.STORAGE_PROVIDER,
+      minioEndpoint: process.env.MINIO_ENDPOINT,
+      minioAccessKey: process.env.MINIO_ACCESS_KEY,
+      minioSecretKey: process.env.MINIO_SECRET_KEY,
+      minioBucket: process.env.MINIO_BUCKET,
     },
     logging: {
       logLevel: process.env.LOG_LEVEL,
@@ -268,6 +283,11 @@ export const config: Config = Object.freeze({
   mongoUri: rawConfig.db.mongoUri,
   maxUploadSize: rawConfig.storage.maxUploadSize,
   uploadsDir: path.resolve(process.cwd(), rawConfig.storage.uploadsDir),
+  storageProvider: rawConfig.storage.storageProvider,
+  minioEndpoint: rawConfig.storage.minioEndpoint,
+  minioAccessKey: rawConfig.storage.minioAccessKey,
+  minioSecretKey: rawConfig.storage.minioSecretKey,
+  minioBucket: rawConfig.storage.minioBucket,
   enableMarkdownExport: rawConfig.app.enableMarkdownExport,
   enableJsonExport: rawConfig.app.enableJsonExport,
   batchInsertSize: rawConfig.db.batchInsertSize,

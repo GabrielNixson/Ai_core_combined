@@ -32,6 +32,21 @@ services:
     networks:
       - iiot_network
 
+  # minio:
+  #   image: minio/minio:latest
+  #   container_name: iiot_minio
+  #   ports:
+  #     - "9000:9000"
+  #     - "9001:9001"
+  #   environment:
+  #     MINIO_ROOT_USER: minioadmin
+  #     MINIO_ROOT_PASSWORD: miniopassword
+  #   volumes:
+  #     - minio_data:/data
+  #   command: server /data --console-address ":9001"
+  #   networks:
+  #     - iiot_network
+
   document_parsing_backend:
     build:
       context: ./document_parsing_backend
@@ -47,12 +62,18 @@ services:
       - QDRANT_HOST=http://qdrant:6333
       - QDRANT_COLLECTION_NAME=documents
       - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - STORAGE_PROVIDER=minio
+      - MINIO_ENDPOINT=http://192.168.2.213:9998
+      - MINIO_ACCESS_KEY=hexradmin
+      - MINIO_SECRET_KEY=hexradmin
+      - MINIO_BUCKET=ai-upload-doc
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
       - mongodb
       - qdrant
       - redis
+      # - minio
     networks:
       - iiot_network
 
@@ -93,6 +114,7 @@ volumes:
   mongo_data:
   qdrant_data:
   redis_data:
+  # minio_data:
 
 networks:
   iiot_network:

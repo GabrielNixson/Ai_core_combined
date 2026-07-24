@@ -24,12 +24,14 @@ class DocumentService {
         logger_1.logger.debug(`Processing file upload: ${file.originalname}`);
         // Extract UUID from stored filename (e.g. "a1b2c3d4-e5f6-...pdf")
         const ext = path_1.default.extname(file.originalname).toLowerCase();
-        const documentId = path_1.default.basename(file.filename, ext);
+        const rawStoredName = file.filename || file.key || '';
+        const storedName = path_1.default.basename(rawStoredName);
+        const documentId = path_1.default.basename(storedName, ext);
         const docData = {
             documentId,
             originalName: file.originalname,
-            storedName: file.filename,
-            filePath: file.path,
+            storedName: storedName,
+            filePath: file.path || file.key || '',
             mimeType: file.mimetype,
             extension: ext,
             size: file.size,
