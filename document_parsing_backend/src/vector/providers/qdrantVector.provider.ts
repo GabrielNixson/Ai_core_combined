@@ -10,13 +10,13 @@ export class QdrantVectorProvider implements VectorProvider {
 
   constructor() {
     const host = config.qdrantHost;
-    if (!host || host.includes('mock') || host === 'http://localhost:6333' && process.env.NODE_ENV === 'test') {
+    if (!host || host.includes('mock') || process.env.NODE_ENV === 'test') {
       this.isMock = true;
       logger.warn('[Qdrant Vector Provider] Running in MOCK mode with in-memory vector storage.');
     }
 
     this.client = new QdrantClient({
-      url: host || 'http://localhost:6333',
+      url: host,
       apiKey: config.qdrantApiKey,
     });
   }

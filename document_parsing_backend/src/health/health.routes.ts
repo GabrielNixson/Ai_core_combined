@@ -104,7 +104,7 @@ router.get('/ready', async (_req: Request, res: Response) => {
 
   // 3. Check Qdrant collections API
   try {
-    const isMock = config.qdrantHost?.includes('mock') || (config.qdrantHost === 'http://localhost:6333' && config.env === 'test');
+    const isMock = config.qdrantHost?.includes('mock') || (config.env === 'test');
     if (isMock) {
       checks.qdrant = 'UP (MOCK)';
     } else {
