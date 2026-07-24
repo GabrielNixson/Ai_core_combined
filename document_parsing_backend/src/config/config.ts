@@ -32,6 +32,7 @@ const QueueConfigSchema = z.object({
 
 const AIConfigSchema = z.object({
   openaiApiKey: z.string().optional(),
+  ollamaBaseUrl: z.string().default('http://localhost:11434'),
   embeddingProvider: z.string().default('openai'),
   embeddingModel: z.string().default('text-embedding-3-small'),
   embeddingBatchSize: z.coerce.number().default(100),
@@ -139,6 +140,7 @@ export interface Config {
   embeddingMaxRetries: number;
   embeddingRequestTimeout: number;
   openaiApiKey?: string;
+  ollamaBaseUrl: string;
   storageProvider: 'local' | 'minio';
   minioEndpoint: string;
   minioAccessKey: string;
@@ -197,6 +199,7 @@ try {
     },
     ai: {
       openaiApiKey: process.env.OPENAI_API_KEY,
+      ollamaBaseUrl: process.env.OLLAMA_BASE_URL || process.env.OLLAMA_HOST,
       embeddingProvider: process.env.EMBEDDING_PROVIDER,
       embeddingModel: process.env.EMBEDDING_MODEL,
       embeddingBatchSize: process.env.EMBEDDING_BATCH_SIZE,
@@ -306,6 +309,7 @@ export const config: Config = Object.freeze({
   embeddingMaxRetries: rawConfig.ai.embeddingMaxRetries,
   embeddingRequestTimeout: rawConfig.ai.embeddingRequestTimeout,
   openaiApiKey: rawConfig.ai.openaiApiKey,
+  ollamaBaseUrl: rawConfig.ai.ollamaBaseUrl,
   qdrantHost: rawConfig.vector.qdrantHost,
   qdrantApiKey: rawConfig.vector.qdrantApiKey,
   collectionName: rawConfig.vector.collectionName,

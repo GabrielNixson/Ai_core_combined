@@ -42,7 +42,7 @@ export class OpenAIEmbeddingProvider implements EmbeddingProvider {
       logger.info(`[OpenAI Embedding Provider] MOCK MODE: Generating embeddings via Ollama nomic-embed-text for ${texts.length} inputs.`);
       try {
         const embeddings: number[][] = [];
-        const ollamaBaseUrl = process.env.OLLAMA_BASE_URL || 'http://192.168.2.210:11434';
+        const ollamaBaseUrl = config.ollamaBaseUrl;
         const cleanBase = ollamaBaseUrl.replace(/\/$/, '');
         
         for (const text of texts) {
