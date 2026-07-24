@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+jspm_packages/
+web_modules/
+
+# Local uploads and data folders
+uploads/
+**/uploads/
+**/uploads/original/
+**/uploads/markdown/
+**/uploads/json/
+minio_data/
+mongo_data/
+qdrant_data/
+redis_data/
+
+# Build and compilation outputs
+dist/
+build/
+out/
+.next/
+.cache/
+
+# Environment configurations and secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.env.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE / Editor folders
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini
