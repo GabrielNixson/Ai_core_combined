@@ -39,11 +39,12 @@ export class OpenAIEmbeddingProvider implements EmbeddingProvider {
     // Handle mock API key for local testing/development/CI
     const apiKey = config.openaiApiKey;
     if (!this.client || !apiKey || apiKey === 'mock-key-for-now') {
-      logger.info(`[OpenAI Embedding Provider] MOCK MODE: Generating embeddings via Ollama nomic-embed-text for ${texts.length} inputs.`);
+      const ollamaBaseUrl = config.ollamaBaseUrl;
+      const cleanBase = ollamaBaseUrl.replace(/\/$/, '');
+      logger.info(`[OpenAI Embedding Provider] MOCK MODE: Requesting embeddings from local Ollama endpoint (${cleanBase}/api/embeddings) using model 'nomic-embed-text:latest' for ${texts.length} inputs.`);
       try {
         const embeddings: number[][] = [];
-        const ollamaBaseUrl = config.ollamaBaseUrl;
-        const cleanBase = ollamaBaseUrl.replace(/\/$/, '');
+        const startTime = Date.now();
         
         for (const text of texts) {
           const response = await fetch(`${cleanBase}/api/embeddings`, {
@@ -56,15 +57,21 @@ export class OpenAIEmbeddingProvider implements EmbeddingProvider {
           }
           const data = await response.json() as { embedding: number[] };
           let vector = data.embedding;
-          if (vector.length < 1536) {
-            vector = [...vector, ...Array(1536 - vector.length).fill(0)];
+          const targetDim = config.vectorDimensions || 768;
+          if (vector.length < targetDim) {
+            vector = [...vector, ...Array(targetDim - vector.length).fill(0)];
+          } else if (vector.length > targetDim) {
+            vector = vector.slice(0, targetDim);
           }
           embeddings.push(vector);
         }
+        const latency = Date.now() - startTime;
+        logger.info(`[OpenAI Embedding Provider] Successfully generated and configured ${embeddings.length} embeddings using Ollama 'nomic-embed-text:latest' in ${latency}ms.`);
         return embeddings;
       } catch (err: any) {
         logger.warn(`[OpenAI Embedding Provider] Fallback from Ollama to random mock embeddings due to error: ${err.message}`);
-        return texts.map(() => Array.from({ length: 1536 }, () => Math.random() - 0.5));
+        const targetDim = config.vectorDimensions || 768;
+        return texts.map(() => Array.from({ length: targetDim }, () => Math.random() - 0.5));
       }
     }
 

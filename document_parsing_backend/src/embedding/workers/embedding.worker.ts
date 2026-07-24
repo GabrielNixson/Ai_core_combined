@@ -100,7 +100,7 @@ export class EmbeddingWorker {
         const bulkOps = chunks.map((chunk, index) => {
           const res = results[index];
           const embedding = res?.embedding || [];
-          const dimensions = res?.dimensions || 1536;
+          const dimensions = res?.dimensions || config.vectorDimensions || 768;
           return {
             updateOne: {
               filter: { chunkId: chunk.chunkId },

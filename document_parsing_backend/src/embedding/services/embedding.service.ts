@@ -57,7 +57,7 @@ export class EmbeddingService {
 
     // If there are no valid texts to embed, return the zero vector arrays immediately
     if (validTexts.length === 0) {
-      const defaultDim = 1536; // OpenAI text-embedding-3-small default
+      const defaultDim = config.vectorDimensions || 768; // Fallback default
       for (let i = 0; i < results.length; i++) {
         results[i] = {
           embedding: new Array(defaultDim).fill(0),
@@ -82,7 +82,7 @@ export class EmbeddingService {
     }
 
     // 3. Assemble results back to original indices
-    const dimensions = allEmbeddings[0]?.length || 1536;
+    const dimensions = allEmbeddings[0]?.length || config.vectorDimensions || 768;
 
     for (let i = 0; i < validIndices.length; i++) {
       const originalIdx = validIndices[i];

@@ -67,7 +67,7 @@ const VectorConfigSchema = z.object({
   qdrantHost: z.string().default('http://localhost:6333'),
   qdrantApiKey: z.string().optional(),
   collectionName: z.string().default('documents'),
-  vectorDimensions: z.coerce.number().default(1536),
+  vectorDimensions: z.coerce.number().default(768),
   distanceMetric: z.enum(['Cosine', 'Euclidean', 'Dot']).default('Cosine'),
   qdrantBatchSize: z.coerce.number().default(100),
   qdrantTimeout: z.coerce.number().default(30000),

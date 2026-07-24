@@ -61,6 +61,8 @@ services:
       - REDIS_PORT=6379
       - QDRANT_HOST=http://qdrant:6333
       - QDRANT_COLLECTION_NAME=documents
+      - QDRANT_VECTOR_DIMENSIONS=768
+      - EMBEDDING_MODEL=nomic-embed-text
       - OLLAMA_BASE_URL=http://192.168.2.210:11434
       - STORAGE_PROVIDER=minio
       - MINIO_ENDPOINT=http://192.168.2.213:9998
