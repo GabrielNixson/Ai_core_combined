@@ -61,7 +61,7 @@ services:
       - REDIS_PORT=6379
       - QDRANT_HOST=http://qdrant:6333
       - QDRANT_COLLECTION_NAME=documents
-      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OLLAMA_BASE_URL=http://192.168.2.210:11434
       - STORAGE_PROVIDER=minio
       - MINIO_ENDPOINT=http://192.168.2.213:9998
       - MINIO_ACCESS_KEY=hexradmin
@@ -87,7 +87,7 @@ services:
     environment:
       - PORT=5100
       - MONGO_URI=mongodb://mongodb:27017/ai-chat
-      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OLLAMA_BASE_URL=http://192.168.2.210:11434
       - OLLAMA_MODEL=qwen3.5:9b
       - OLLAMA_DOC_MODEL=qwen3.5:9b
       - OLLAMA_PLC_MODEL=llama3.1:8b

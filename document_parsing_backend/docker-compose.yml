@@ -24,15 +24,15 @@ services:
       - WORKER_CONCURRENCY=2
       - MAX_UPLOAD_SIZE=52428800
       - STORAGE_PROVIDER=minio
-      - MINIO_ENDPOINT=http://minio:9000
-      - MINIO_ACCESS_KEY=minioadmin
-      - MINIO_SECRET_KEY=miniopassword
-      - MINIO_BUCKET=iiot-documents
+      - MINIO_ENDPOINT=http://192.168.2.213:9998
+      - MINIO_ACCESS_KEY=hexradmin
+      - MINIO_SECRET_KEY=hexradmin
+      - MINIO_BUCKET=ai-upload-doc
     depends_on:
       - mongodb
       - redis
       - qdrant
-      - minio
+      # - minio
 
   mongodb:
     image: mongo:6.0-jammy
@@ -56,20 +56,20 @@ services:
     volumes:
       - qdrant_data:/qdrant/storage
 
-  minio:
-    image: minio/minio:latest
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: miniopassword
-    volumes:
-      - minio_data:/data
-    command: server /data --console-address ":9001"
+  # minio:
+  #   image: minio/minio:latest
+  #   ports:
+  #     - "9000:9000"
+  #     - "9001:9001"
+  #   environment:
+  #     MINIO_ROOT_USER: minioadmin
+  #     MINIO_ROOT_PASSWORD: miniopassword
+  #   volumes:
+  #     - minio_data:/data
+  #   command: server /data --console-address ":9001"
 
 volumes:
   mongodb_data:
   redis_data:
   qdrant_data:
-  minio_data:
+  # minio_data:
