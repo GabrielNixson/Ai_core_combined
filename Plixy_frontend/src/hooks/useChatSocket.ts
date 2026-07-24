@@ -1,7 +1,13 @@
  import { useState, useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5100';
+const getFallbackSocketURL = () => {
+  if (typeof window !== 'undefined' && window.location) {
+    return `${window.location.protocol}//${window.location.hostname}:5100`;
+  }
+  return 'http://localhost:5100';
+};
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || getFallbackSocketURL();
 
 export interface ChatMessage {
   role: 'user' | 'ai';
