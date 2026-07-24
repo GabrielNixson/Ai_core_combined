@@ -4,11 +4,14 @@
 
 # Package manager files
 node_modules
+**/node_modules
 npm-debug.log
 
 # Build outputs
 dist
+**/dist
 build
+**/build
 
 # Env configurations
 .env
