@@ -8,7 +8,6 @@ export async function createMcpClient() {
   const transport = new StdioClientTransport({
     command: "node",
     args: [mcpServerPath],
-    env: process.env as Record<string, string>,
   });
 
   const client = new Client(

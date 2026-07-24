@@ -189,8 +189,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     const { query } = request.params.arguments as { query: string };
 
     try {
-      const parserUrl = process.env.DOCUMENT_PARSER_URL || "http://localhost:3000";
-      const response = await fetch(`${parserUrl}/retrieval/search`, {
+      const response = await fetch("http://localhost:3000/retrieval/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

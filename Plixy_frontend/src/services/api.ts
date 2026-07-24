@@ -1,12 +1,6 @@
 import axios from 'axios';
 
-const getFallbackURL = () => {
-  if (typeof window !== 'undefined' && window.location) {
-    return `${window.location.protocol}//${window.location.hostname}:5100`;
-  }
-  return 'http://localhost:5100';
-};
-const rawBaseURL = import.meta.env.VITE_API_URL || getFallbackURL();
+const rawBaseURL = import.meta.env.VITE_API_URL || 'http://localhost:5100';
 const baseURL = rawBaseURL.endsWith('/api') ? rawBaseURL : `${rawBaseURL}/api`;
 
 const api = axios.create({
