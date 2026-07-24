@@ -1,121 +1,19 @@
-version: '3.8'
-
-services:
-  mongodb:
-    image: mongo:latest
-    container_name: iiot_mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-    networks:
-      - iiot_network
-
-  qdrant:
-    image: qdrant/qdrant:latest
-    container_name: iiot_qdrant
-    ports:
-      - "6333:6333"
-      - "6334:6334"
-    volumes:
-      - qdrant_data:/qdrant/storage
-    networks:
-      - iiot_network
-
-  redis:
-    image: redis:7-alpine
-    container_name: iiot_redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    networks:
-      - iiot_network
-
-  # minio:
-  #   image: minio/minio:latest
-  #   container_name: iiot_minio
-  #   ports:
-  #     - "9000:9000"
-  #     - "9001:9001"
-  #   environment:
-  #     MINIO_ROOT_USER: minioadmin
-  #     MINIO_ROOT_PASSWORD: miniopassword
-  #   volumes:
-  #     - minio_data:/data
-  #   command: server /data --console-address ":9001"
-  #   networks:
-  #     - iiot_network
-
-  document_parsing_backend:
-    build:
-      context: ./document_parsing_backend
-      dockerfile: Dockerfile
-    container_name: document_parsing_backend
-    ports:
-      - "3000:3000"
-    environment:
-      - PORT=3000
-      - MONGODB_URI=mongodb://mongodb:27017/document_processor
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - QDRANT_HOST=http://qdrant:6333
-      - QDRANT_COLLECTION_NAME=documents
-      - OLLAMA_BASE_URL=http://host.docker.internal:11434
-      - STORAGE_PROVIDER=minio
-      - MINIO_ENDPOINT=http://192.168.2.213:9998
-      - MINIO_ACCESS_KEY=hexradmin
-      - MINIO_SECRET_KEY=hexradmin
-      - MINIO_BUCKET=ai-upload-doc
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    depends_on:
-      - mongodb
-      - qdrant
-      - redis
-      # - minio
-    networks:
-      - iiot_network
-
-  langgraph_backend:
-    build:
-      context: .
-      dockerfile: ./LangGraph_backend/Dockerfile
-    container_name: langgraph_backend
-    ports:
-      - "5100:5100"
-    environment:
-      - PORT=5100
-      - MONGO_URI=mongodb://mongodb:27017/ai-chat
-      - OLLAMA_BASE_URL=http://host.docker.internal:11434
-      - OLLAMA_MODEL=qwen3.5:9b
-      - OLLAMA_DOC_MODEL=qwen3.5:9b
-      - OLLAMA_PLC_MODEL=llama3.1:8b
-    depends_on:
-      - mongodb
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    networks:
-      - iiot_network
-
-  plixy_frontend:
-    build:
-      context: ./Plixy_frontend
-      dockerfile: Dockerfile
-    container_name: plixy_frontend
-    ports:
-      - "5003:80"
-    depends_on:
-      - langgraph_backend
-    networks:
-      - iiot_network
-
-volumes:
-  mongo_data:
-  qdrant_data:
-  redis_data:
-  # minio_data:
-
-networks:
-  iiot_network:
-    driver: bridge
+# Monolithic Compose Disabled
+#
+# Instead of a monolithic service launcher, this project has been split into 
+# completely decoupled, self-contained microservice stacks:
+#
+# 1. Ingestion Backend & Databases:
+#    - Folder: ./document_parsing_backend/
+#    - Start Command: cd document_parsing_backend && docker compose up --build -d
+#
+# 2. Chat Backend:
+#    - Folder: ./LangGraph_backend/
+#    - Start Command: cd LangGraph_backend && docker compose up --build -d
+#
+# 3. Client Frontend:
+#    - Folder: ./Plixy_frontend/
+#    - Start Command: cd Plixy_frontend && docker compose up --build -d
+#
+# All database dependencies and port configurations are fully contained within 
+# their respective directories.

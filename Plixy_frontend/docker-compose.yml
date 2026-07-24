@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: plixy-frontend:latest
+    container_name: plixy_frontend
+    ports:
+      - "5003:80"

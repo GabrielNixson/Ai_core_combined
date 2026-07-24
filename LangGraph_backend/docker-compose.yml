@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: LangGraph_backend/Dockerfile
+    image: langgraph-chat-backend:latest
+    container_name: langgraph_chat_backend
+    ports:
+      - "5100:5100"
+    environment:
+      - NODE_ENV=production
+      - PORT=5100
+      - MONGO_URI=mongodb://mongodb:27017/ai-chat
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OLLAMA_MODEL=qwen3.5:9b
+      - OLLAMA_DOC_MODEL=qwen3.5:9b
+      - OLLAMA_PLC_MODEL=llama3.1:8b
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    container_name: chat_mongodb
+    ports:
+      - "27018:27017" # Remapped to prevent conflict with parser's mongo on port 27017
+    volumes:
+      - mongo_chat_data:/data/db
+
+volumes:
+  mongo_chat_data:
