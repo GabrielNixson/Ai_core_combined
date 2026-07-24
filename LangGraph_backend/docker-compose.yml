@@ -17,7 +17,7 @@ services:
       - OLLAMA_MODEL=qwen3.5:9b
       - OLLAMA_DOC_MODEL=qwen3.5:9b
       - OLLAMA_PLC_MODEL=llama3.1:8b
-      - DOCUMENT_PARSER_URL=http://host.docker.internal:3000
+      - DOCUMENT_PARSER_URL=http://192.168.2.213:3000
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
