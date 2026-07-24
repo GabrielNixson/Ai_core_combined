@@ -23,13 +23,16 @@ services:
       - LOG_FORMAT=json
       - WORKER_CONCURRENCY=2
       - MAX_UPLOAD_SIZE=52428800
-      - UPLOADS_DIR=uploads
+      - STORAGE_PROVIDER=minio
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=miniopassword
+      - MINIO_BUCKET=iiot-documents
     depends_on:
       - mongodb
       - redis
       - qdrant
-    volumes:
-      - uploads_data:/app/uploads
+      - minio
 
   mongodb:
     image: mongo:6.0-jammy
@@ -53,8 +56,20 @@ services:
     volumes:
       - qdrant_data:/qdrant/storage
 
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: miniopassword
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+
 volumes:
-  uploads_data:
   mongodb_data:
   redis_data:
   qdrant_data:
+  minio_data:
