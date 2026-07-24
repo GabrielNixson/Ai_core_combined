@@ -32,7 +32,7 @@ const QueueConfigSchema = z.object({
 
 const AIConfigSchema = z.object({
   openaiApiKey: z.string().optional(),
-  ollamaBaseUrl: z.string().default('http://localhost:11434'),
+  ollamaBaseUrl: z.string().default('http://192.168.2.210:11434'),
   embeddingProvider: z.string().default('openai'),
   embeddingModel: z.string().default('text-embedding-3-small'),
   embeddingBatchSize: z.coerce.number().default(100),

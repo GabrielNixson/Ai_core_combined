@@ -28,6 +28,7 @@ services:
       - MINIO_ACCESS_KEY=hexradmin
       - MINIO_SECRET_KEY=hexradmin
       - MINIO_BUCKET=ai-upload-doc
+      - OLLAMA_BASE_URL=http://192.168.2.210:11434
     depends_on:
       - mongodb
       - redis
