@@ -49,8 +49,9 @@ router.post("/upload", upload.single("file"), async (req: Request, res: Response
       formData.append("requestedBy", req.body.requestedBy);
     }
 
+    const parserUrl = process.env.DOCUMENT_PARSER_URL || "http://localhost:3000";
     // Call the Document Parsing Agent (Knowledge Base)
-    const response = await fetch("http://localhost:3000/documents/upload", {
+    const response = await fetch(`${parserUrl}/documents/upload`, {
       method: "POST",
       body: formData,
     });
