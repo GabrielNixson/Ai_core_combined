@@ -93,6 +93,7 @@ services:
       - OLLAMA_MODEL=qwen3.5:9b
       - OLLAMA_DOC_MODEL=qwen3.5:9b
       - OLLAMA_PLC_MODEL=llama3.1:8b
+      - DOCUMENT_PARSER_URL=http://document_parsing_backend:3000
     depends_on:
       - mongodb
     extra_hosts:
